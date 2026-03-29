@@ -1,7 +1,10 @@
 package com.fax.cursotestingaris.di
 
 import com.fax.cursotestingaris.product_list.data.remote.MarketApiService
+import dagger.Module
 import dagger.Provides
+import dagger.hilt.InstallIn
+import dagger.hilt.components.SingletonComponent
 import kotlinx.serialization.json.Json
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.OkHttpClient
@@ -12,6 +15,8 @@ import java.util.concurrent.TimeUnit
 import javax.inject.Named
 import javax.inject.Singleton
 
+@Module
+@InstallIn(SingletonComponent::class)
 object NetworkModule {
 
     @Provides
@@ -29,9 +34,10 @@ object NetworkModule {
         }
         val builder = OkHttpClient.Builder()
 
-        if (BuildConfig.DEBUG) {
-            builder.addInterceptor(loggingInterceptor)
-        }
+//        if (BuildConfig.DEBUG) {
+//            builder.addInterceptor(loggingInterceptor)
+//        }
+        builder.addInterceptor(loggingInterceptor)
         return builder
             .connectTimeout(30, TimeUnit.SECONDS)
             .readTimeout(30, TimeUnit.SECONDS)
