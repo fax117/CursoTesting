@@ -10,7 +10,7 @@ import com.fax.cursotestingaris.product_list.data.local.database.entity.Promotio
 @Database(
     entities = [ProductEntity::class, PromotionEntity::class],
     version = 1,
-    exportSchema = false
+    exportSchema = true
 )
 abstract class MiniMarketDatabase : RoomDatabase() {
 
