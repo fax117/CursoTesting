@@ -1,12 +1,15 @@
 package com.fax.cursotestingaris.product_list.presentation
 
-import androidx.compose.foundation.background
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.animateContentSize
+import androidx.compose.animation.expandVertically
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.shrinkVertically
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -29,6 +32,7 @@ import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.fax.cursotestingaris.product_list.domain.models.Product
 import com.fax.cursotestingaris.product_list.presentation.components.FiltersMenu
+import com.fax.cursotestingaris.product_list.presentation.components.HomeTopAppBar
 import com.fax.cursotestingaris.product_list.presentation.components.ProductItem
 
 @Composable
@@ -38,13 +42,14 @@ fun ProductListScreen(
 ) {
 
     val uiState by productListViewModel.uiState.collectAsStateWithLifecycle()
-    val snackbarHostState = remember { SnackbarHostState() }
+    val filtersVisible by productListViewModel.filtersVisible.collectAsStateWithLifecycle()
+    val snackBarHostState = remember { SnackbarHostState() }
 
     LaunchedEffect(Unit) {
         productListViewModel.events.collect { event ->
             when (event) {
                 is ProductListEvent.ShowMessage -> {
-                    snackbarHostState.showSnackbar(event.message)
+                    snackBarHostState.showSnackbar(event.message)
                 }
 
                 else -> {}
@@ -53,7 +58,12 @@ fun ProductListScreen(
     }
 
     Scaffold(
-        snackbarHost = { SnackbarHost(snackbarHostState) }
+        topBar = {
+            HomeTopAppBar(filtersVisible = filtersVisible, onFiltersSelected = { visible ->
+                productListViewModel.setFiltersVisible(visible)
+            })
+        },
+        snackbarHost = { SnackbarHost(snackBarHostState) }
     ) { paddingValues ->
 
         when (val state: ProductListUIState = uiState) {
@@ -84,18 +94,25 @@ fun ProductListScreen(
                     modifier = modifier
                         .fillMaxSize()
                         .padding(paddingValues)
+                        .animateContentSize()
                 ) {
-                    FiltersMenu(
-                        state = state,
-                        onCategorySelected = { category ->
-                            productListViewModel.setCategory(category)
-                        },
-                        onSortOrderSelected = { sortOptions ->
-                            productListViewModel.setSortOption(
-                                sortOptions
-                            )
-                        }
-                    )
+                    AnimatedVisibility(
+                        visible = filtersVisible,
+                        enter = expandVertically() + fadeIn(),
+                        exit = shrinkVertically() + fadeOut()
+                    ) {
+                        FiltersMenu(
+                            state = state,
+                            onCategorySelected = { category ->
+                                productListViewModel.setCategory(category)
+                            },
+                            onSortOrderSelected = { sortOptions ->
+                                productListViewModel.setSortOption(
+                                    sortOptions
+                                )
+                            }
+                        )
+                    }
 
                     Text(
                         text = "${state.products.size} products",
