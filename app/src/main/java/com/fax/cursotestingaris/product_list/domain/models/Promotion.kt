@@ -1,6 +1,6 @@
 package com.fax.cursotestingaris.product_list.domain.models
 
-import kotlin.time.Instant
+import java.time.Instant
 
 enum class PromotionType{
     PERCENT,
