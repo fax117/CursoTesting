@@ -3,6 +3,7 @@ package com.fax.cursotestingaris.product_list.presentation
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.fax.cursotestingaris.product_list.domain.models.Product
+import com.fax.cursotestingaris.product_list.domain.models.ProductWithPromotion
 import com.fax.cursotestingaris.product_list.domain.models.SortOption
 import com.fax.cursotestingaris.product_list.domain.usecase.GetProductsUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -30,14 +31,18 @@ class ProductListViewModel @Inject constructor(
     private val _events = MutableSharedFlow<ProductListEvent>(extraBufferCapacity = 1)
     val events: SharedFlow<ProductListEvent> = _events.asSharedFlow()
 
+    private val _filtersVisible = MutableStateFlow<Boolean>(false)
+    val filtersVisible: StateFlow<Boolean> = _filtersVisible.asStateFlow()
+
+
     init {
         loadProducts()
     }
 
     fun loadProducts() {
         _uiState.value = ProductListUIState.Loading
-        getProductsUseCase().onEach { products: List<Product> ->
-                val categories: List<String> = products.map { it.category }.distinct().sorted()
+        getProductsUseCase().onEach { products: List<ProductWithPromotion> ->
+                val categories: List<String> = products.map { it.product.category }.distinct().sorted()
                 _uiState.value = ProductListUIState.Success(
                     products = products,
                     categories = categories,
@@ -61,6 +66,10 @@ class ProductListViewModel @Inject constructor(
         viewModelScope.launch {
             //Llamar settings Repository
         }
+    }
+
+    fun setFiltersVisible(visible: Boolean) {
+        _filtersVisible.value = visible
     }
 
 }
