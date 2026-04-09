@@ -1,5 +1,6 @@
 package com.fax.cursotestingaris.product_list.domain.usecase
 
+import com.fax.cursotestingaris.product_list.domain.models.ProductPromotion
 import com.fax.cursotestingaris.product_list.domain.models.ProductWithPromotion
 import com.fax.cursotestingaris.product_list.domain.repositories.ProductRepository
 import com.fax.cursotestingaris.product_list.domain.repositories.PromotionRepository
@@ -25,12 +26,11 @@ class GetProductsUseCase @Inject constructor(
                 it.startTime.isBefore(now) && it.endTime.isAfter(now)
             }
 
-            products.forEach { product ->
-                val promotion = getPromotionForProduct(product, activePromotions)
+            products.map { product ->
+                val promotion: ProductPromotion? = getPromotionForProduct(product, activePromotions)
                 ProductWithPromotion(product = product, promotion = promotion)
             }
 
-            emptyList()
         }
     }
 }

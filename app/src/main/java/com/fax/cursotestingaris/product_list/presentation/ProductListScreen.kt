@@ -31,6 +31,7 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.fax.cursotestingaris.product_list.domain.models.Product
+import com.fax.cursotestingaris.product_list.domain.models.ProductWithPromotion
 import com.fax.cursotestingaris.product_list.presentation.components.FiltersMenu
 import com.fax.cursotestingaris.product_list.presentation.components.HomeTopAppBar
 import com.fax.cursotestingaris.product_list.presentation.components.ProductItem
@@ -146,8 +147,8 @@ fun ProductListScreen(
                         }
                     } else {
                         LazyColumn {
-                            items(state.products) { product: Product ->
-                                ProductItem(product = product, onClick = {})
+                            items(state.products) { item: ProductWithPromotion ->
+                                ProductItem(item = item , onClick = {})
                             }
                         }
                     }
