@@ -43,8 +43,8 @@ fun ProductListScreen(
 ) {
 
     val uiState by productListViewModel.uiState.collectAsStateWithLifecycle()
-    val filtersVisible by productListViewModel.filtersVisible.collectAsStateWithLifecycle()
     val snackBarHostState = remember { SnackbarHostState() }
+    val filtersVisible by productListViewModel.filtersVisible.collectAsStateWithLifecycle()
 
     LaunchedEffect(Unit) {
         productListViewModel.events.collect { event ->
