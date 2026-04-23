@@ -19,8 +19,8 @@ import androidx.compose.ui.text.font.FontWeight.Companion.Bold
 @Composable
 fun HomeTopAppBar(
     filtersVisible: Boolean = true,
-    onFiltersSelected: (Boolean) -> Unit = {},
-    onSettingsSelected: () -> Unit = {}
+    onFiltersSelected: (Boolean) -> Unit,
+    navigateToSettings: () -> Unit
 ) {
     TopAppBar(
         modifier = Modifier,
@@ -43,7 +43,7 @@ fun HomeTopAppBar(
                     tint = MaterialTheme.colorScheme.onPrimaryContainer
                 )
             }
-            IconButton(onClick = { onSettingsSelected() }) {
+            IconButton(onClick = { navigateToSettings() }) {
                 Icon(
                     imageVector = Icons.Default.Settings,
                     contentDescription = "Settings",

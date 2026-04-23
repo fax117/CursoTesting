@@ -39,12 +39,13 @@ import com.fax.cursotestingaris.product_list.presentation.components.ProductItem
 @Composable
 fun ProductListScreen(
     modifier: Modifier = Modifier,
-    productListViewModel: ProductListViewModel = hiltViewModel()
+    productListViewModel: ProductListViewModel = hiltViewModel(),
+    navigateToSettings: () -> Unit
 ) {
 
     val uiState by productListViewModel.uiState.collectAsStateWithLifecycle()
-    val filtersVisible by productListViewModel.filtersVisible.collectAsStateWithLifecycle()
     val snackBarHostState = remember { SnackbarHostState() }
+    val filtersVisible by productListViewModel.filtersVisible.collectAsStateWithLifecycle()
 
     LaunchedEffect(Unit) {
         productListViewModel.events.collect { event ->
@@ -60,9 +61,12 @@ fun ProductListScreen(
 
     Scaffold(
         topBar = {
-            HomeTopAppBar(filtersVisible = filtersVisible, onFiltersSelected = { visible ->
-                productListViewModel.setFiltersVisible(visible)
-            })
+            HomeTopAppBar(
+                filtersVisible = filtersVisible, onFiltersSelected = { visible ->
+                    productListViewModel.setFiltersVisible(visible)
+                },
+                navigateToSettings = { navigateToSettings() }
+            )
         },
         snackbarHost = { SnackbarHost(snackBarHostState) }
     ) { paddingValues ->
@@ -148,7 +152,7 @@ fun ProductListScreen(
                     } else {
                         LazyColumn {
                             items(state.products) { item: ProductWithPromotion ->
-                                ProductItem(item = item , onClick = {})
+                                ProductItem(item = item, onClick = {})
                             }
                         }
                     }

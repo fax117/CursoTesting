@@ -1,6 +1,7 @@
 package com.fax.cursotestingaris.di
 
 import android.app.Application
+import android.content.Context
 import androidx.room.Room
 import com.fax.cursotestingaris.product_list.data.local.database.MiniMarketDatabase
 import com.fax.cursotestingaris.product_list.data.local.database.dao.ProductDao
@@ -8,6 +9,7 @@ import com.fax.cursotestingaris.product_list.data.local.database.dao.PromotionDa
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
+import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import javax.inject.Singleton
 
@@ -17,11 +19,11 @@ object RoomModule {
 
     @Provides
     @Singleton
-    fun provideMiniMarketDatabase(application: Application): MiniMarketDatabase {
+    fun provideMiniMarketDatabase(@ApplicationContext context: Context): MiniMarketDatabase {
         return Room.databaseBuilder(
-            application,
-            MiniMarketDatabase::class.java,
-            "mini_market_database"
+            context = context,
+            klass = MiniMarketDatabase::class.java,
+            name = "mini_market_database"
         ).build()
     }
 
