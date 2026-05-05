@@ -40,7 +40,8 @@ import com.fax.cursotestingaris.product_list.presentation.components.ProductItem
 fun ProductListScreen(
     modifier: Modifier = Modifier,
     productListViewModel: ProductListViewModel = hiltViewModel(),
-    navigateToSettings: () -> Unit
+    navigateToSettings: () -> Unit,
+    navigateToProductDetail: (String) -> Unit
 ) {
 
     val uiState by productListViewModel.uiState.collectAsStateWithLifecycle()
@@ -152,7 +153,10 @@ fun ProductListScreen(
                     } else {
                         LazyColumn {
                             items(state.products) { item: ProductWithPromotion ->
-                                ProductItem(item = item, onClick = {})
+                                ProductItem(
+                                    item = item,
+                                    onClick = { navigateToProductDetail(it.product.id) }
+                                )
                             }
                         }
                     }
