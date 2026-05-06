@@ -3,7 +3,8 @@ package com.fax.cursotestingaris.di
 import android.app.Application
 import android.content.Context
 import androidx.room.Room
-import com.fax.cursotestingaris.product_list.data.local.database.MiniMarketDatabase
+import com.fax.cursotestingaris.cart.data.local.database.dao.CartItemDao
+import com.fax.cursotestingaris.core.data.local.database.MiniMarketDatabase
 import com.fax.cursotestingaris.product_list.data.local.database.dao.ProductDao
 import com.fax.cursotestingaris.product_list.data.local.database.dao.PromotionDao
 import dagger.Module
@@ -37,6 +38,12 @@ object RoomModule {
     @Singleton
     fun providePromotionDao(db: MiniMarketDatabase): PromotionDao {
         return db.promotionDao()
+    }
+
+    @Provides
+    @Singleton
+    fun provideCartItemDao(db: MiniMarketDatabase): CartItemDao {
+        return db.cartItemDao()
     }
 
 }

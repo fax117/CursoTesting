@@ -23,6 +23,7 @@ import javax.inject.Inject
 class ProductRepositoryImplementation @Inject constructor(
     val remoteDataSource: RemoteDataSource,
     val localDataSource: LocalDataSource,
+
     val dispatchers: DispatchersProvider
 ) : ProductRepository {
 

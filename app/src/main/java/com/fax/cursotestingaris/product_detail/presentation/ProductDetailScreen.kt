@@ -35,6 +35,7 @@ import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil3.compose.AsyncImage
 import com.fax.cursotestingaris.core.presentation.components.MiniMarketTopAppBar
+import com.fax.cursotestingaris.product_detail.presentation.components.AddToCartButton
 import com.fax.cursotestingaris.product_list.domain.models.ProductPromotion
 
 @Composable
@@ -56,7 +57,11 @@ fun ProductDetailScreen(
                 title = uiState.item?.product?.name.orEmpty(),
                 onBackSelected = { onBack() })
         },
-        bottomBar = {}
+        bottomBar = {
+            AddToCartButton(product = uiState.item?.product, isLoading = uiState.isLoading) {
+                productDetailViewModel.addToCart()
+            }
+        }
     ) { paddingValues ->
 
         Column(
@@ -87,7 +92,7 @@ fun ProductDetailScreen(
                     ) {
                         Card(
                             modifier = Modifier.fillMaxWidth(),
-                            elevation = CardDefaults.cardElevation(defaultElevation = 16.dp),
+                            elevation = CardDefaults.cardElevation(defaultElevation = 8.dp),
                             shape = RoundedCornerShape(16.dp)
                         ) {
                             Column(
@@ -123,10 +128,12 @@ fun ProductDetailScreen(
                                     )
                                 }
 
-                                Text(
-                                    text = product.description,
-                                    style = MaterialTheme.typography.headlineMedium,
-                                )
+                                if (product.description.isNotEmpty()) {
+                                    Text(
+                                        text = product.description,
+                                        style = MaterialTheme.typography.headlineMedium,
+                                    )
+                                }
 
                                 HorizontalDivider()
 
@@ -224,7 +231,7 @@ fun ProductDetailScreen(
                                             ),
                                             style = MaterialTheme.typography.bodyLarge,
                                             fontWeight = FontWeight.Bold,
-                                            color = colorStock
+                                            color = MaterialTheme.colorScheme.onErrorContainer
                                         )
                                     }
 
@@ -239,5 +246,4 @@ fun ProductDetailScreen(
         }
 
     }
-
 }
